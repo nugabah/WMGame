@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model USER {
+  user_id    Int       @id @default(autoincrement()) @map("user_id")
+  email      String    @unique @map("email")
+  created_at DateTime  @default(now()) @map("created_at")
+  updated_at DateTime  @updatedAt @map("updated_at")
+  password   String    @map("password")
+  username   String    @unique @map("username")
+  score      SCORE[]
+  @@map("USER")
+}
+
+model SCORE {
+  score_id   Int       @id @default(autoincrement()) @map("score_id")
+  user_id    Int
+  score      Int       @map("score")
+  start_at   DateTime  @default(now()) @map("start_at")
+  end_at     DateTime  @map("end_at")
+  user       USER      @relation(fields: [user_id], references: [user_id])
+  @@map("SCORE")
+}
